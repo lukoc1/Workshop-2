@@ -5,7 +5,7 @@ public class User {
     private int id; // 0 gdy nie jest jeszcze wpisany do bazy, baza sama ma nadać
     private String userName;
     private String email;
-    private String password;
+    private String password; // hashowane bedzie
 
     public int getId() {
         return id;

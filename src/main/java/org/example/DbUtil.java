@@ -1,5 +1,6 @@
 package org.example;
 
+import javax.swing.plaf.nimbus.State;
 import java.sql.*;
 
 public class DbUtil {
@@ -14,16 +15,23 @@ public class DbUtil {
         return DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
     }
 
-//    public static void insert(Connection conn, String query, String... params) {
-//        try ( PreparedStatement statement = conn.prepareStatement(query)) {
-//            for (int i = 0; i < params.length; i++) {
-//                statement.setString(i + 1, params[i]);
-//            }
-//            statement.executeUpdate();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    public static int insert(Connection conn, String query, String... params) {
+        try ( PreparedStatement statement = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            statement.setString(1, params[0]);
+            statement.setString(2, params[1]);
+            statement.setString(3, params[2]); //statement.setString(3, hashPassword(params[2]));
+            statement.executeUpdate();
+
+            ResultSet resultSet = statement.getGeneratedKeys();
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 
 //    public static void printData(Connection conn, String query, String... columnNames) throws SQLException {
 //
@@ -221,4 +229,8 @@ public class DbUtil {
 //        return allCinemas;
 //    }
 
+
+
 }
+
+
