@@ -2,7 +2,7 @@ package pl.coderslab.entity;
 
 public class User {
 
-    private int id;
+    private int id; // 0 gdy nie jest jeszcze wpisany do bazy, baza sama ma nadać
     private String userName;
     private String email;
     private String password;
