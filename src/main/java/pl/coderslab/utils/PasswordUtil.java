@@ -1,4 +1,4 @@
-package org.example;
+package pl.coderslab.utils;
 
 import org.mindrot.jbcrypt.BCrypt;
 import pl.coderslab.entity.User;

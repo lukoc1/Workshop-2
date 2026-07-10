@@ -13,14 +13,14 @@ public class MainDao {
 
 ////      READ + UPDATE USER
 ////            problem gdyby ktos zrobil - bo bedziemy robic hash hasła które jest już hashowane
-//        User userToUpdate = userDao.read(1);
-//        userDao.update(userToUpdate);
+////        User userToUpdate = userDao.read(7);
+////        userDao.update(userToUpdate);
 
 //        User userToUpdate = userDao.read(4);
 //        System.out.println(userToUpdate);
-//        userToUpdate.setUserName("Arkadiusz");
-//        userToUpdate.setEmail("arek@coderslab.pl");
-//        userToUpdate.setPassword("superPassword");
+//        userToUpdate.setUserName("Adam");
+//        userToUpdate.setEmail("malysz@coderslab.pl");
+//        userToUpdate.setPassword("skoczek");
 //        System.out.println(userToUpdate);
 //        userDao.update(userToUpdate);
 

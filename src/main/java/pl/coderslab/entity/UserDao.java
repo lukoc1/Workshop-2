@@ -1,7 +1,7 @@
 package pl.coderslab.entity;
 
-import org.example.DbUtil;
-import org.example.PasswordUtil;
+import pl.coderslab.utils.DbUtil;
+import pl.coderslab.utils.PasswordUtil;
 
 import java.sql.*;
 import java.util.Arrays;

@@ -1,4 +1,4 @@
-package org.example;
+package pl.coderslab.utils;
 
 import pl.coderslab.entity.User;
 
