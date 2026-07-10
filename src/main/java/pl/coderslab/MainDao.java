@@ -1,4 +1,6 @@
-package pl.coderslab.entity;
+package pl.coderslab;
+
+import pl.coderslab.entity.UserDao;
 
 public class MainDao {
 
