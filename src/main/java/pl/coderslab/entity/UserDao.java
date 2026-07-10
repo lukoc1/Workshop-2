@@ -15,7 +15,7 @@ public class UserDao {
     private static final String UPDATE_USER_QUERY =
             "UPDATE users set userName = ?, email = ?, password = ? WHERE id = ?;";
     private static final String DELETE_USER_QUERY =
-            "DELETE FROM tableName where id = ?";
+            "DELETE FROM users where id = ?";
 
 
 //    create - zapisuje obiekt do tabeli jako nowy wiersz
@@ -82,7 +82,13 @@ public class UserDao {
 //    delete - usuwa obiekt z tabeli czyli usuwa wiersz o id takim samym jak zapisany w obiekcie
     public void delete(int userId) {
 
+        try (Connection conn = DbUtil.connect()) {
 //        W ramach metody należy usunąć wiersz z bazy danych na podstawie przekazanego identyfikatora.
+            DbUtil.remove(conn, DELETE_USER_QUERY, userId);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 ////    findAll - lista obiektow stworzonych z tabeli (wszystkich)

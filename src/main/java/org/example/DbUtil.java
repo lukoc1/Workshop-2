@@ -1,9 +1,7 @@
 package org.example;
 
-import org.mindrot.jbcrypt.BCrypt;
 import pl.coderslab.entity.User;
 
-import javax.swing.plaf.nimbus.State;
 import java.sql.*;
 
 public class DbUtil {
@@ -11,18 +9,23 @@ public class DbUtil {
     private static final String DB_USER = "root";
     private static final String DB_PASS = "NoweHaslo123!";
 
-    //            2. Metoda connect, która przyjmuje nazwę bazy do której ma się połączyć
     private static final String DB_URL_NO_DB = "jdbc:mysql://localhost:3306/%%%?useSSL=false&characterEncoding=utf8&serverTimezone=UTC";
+
 
     public static Connection connect() throws SQLException {
         return DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+    }
+
+    //            2. Metoda connect, która przyjmuje nazwę bazy do której ma się połączyć
+    public static Connection connect(String DbName) throws SQLException {
+        return DriverManager.getConnection(DB_URL_NO_DB.replace("%%%", DbName), DB_USER, DB_PASS);
     }
 
     public static int insert(Connection conn, String query, String... params) {
         try ( PreparedStatement statement = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, params[0]);
             statement.setString(2, params[1]);
-            statement.setString(3, params[2]); //statement.setString(3, hashPassword(params[2]));
+            statement.setString(3, params[2]);
             statement.executeUpdate();
 
             ResultSet resultSet = statement.getGeneratedKeys();
@@ -65,28 +68,23 @@ public class DbUtil {
 //        }
 //    }
 
-    private static final String DELETE_QUERY = "DELETE FROM tableName where id = ?";
-
-    public static void remove(Connection conn, String tableName, int id) {
+    public static void remove(Connection conn, String query, int id) {
         try (PreparedStatement statement =
-                        conn.prepareStatement(DELETE_QUERY.replace("tableName", tableName));) {
+                     conn.prepareStatement(query);) {
             statement.setInt(1, id);
-            statement.executeUpdate();
-        } catch (Exception e) {
+
+            int row = statement.executeUpdate();
+
+            if (row == 0) {
+                System.out.println("Couldnt find User id: " + id + ", to remove");
+            }
+
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-//    Rozbudowa klasy DbUtil:
-//            1. Metoda update() - Analogicznie do insert()
-//            2. Metoda connect, która przyjmuje nazwę bazy do której ma się połączyć
-//            3. Metoda countAll(String tableName) - która zwraca ilość wierszy w tabeli,
-//            4. Metoda count(String sqlQuery) - która zwraca ilość wierszy dla zadanego zapytania
-//            5. Metoda zwracająca czy wiersz o zadanym id istnieje w tabeli:
-//              public static boolean exists(Connection conn, String tableName, int id)
-//            6. Metoda getData - która zwróci tablicę tablic w wynikami dla zadanego zapytania
 
-
-    //            1. Metoda update() - Analogicznie do insert()
+//    UPDATE
     public static void update(Connection conn, String query, String... params) {
         try ( PreparedStatement statement = conn.prepareStatement(query)) {
             for (int i = 0; i < params.length; i++) {
@@ -104,7 +102,7 @@ public class DbUtil {
         }
     }
 
-    //            1. Metoda update() - Analogicznie do insert()
+//    UPDATE - but takes user as parameter
     public static void update(Connection conn, String query, User user) {
         try ( PreparedStatement statement = conn.prepareStatement(query)) {
 
@@ -126,11 +124,7 @@ public class DbUtil {
 
 
 
-    //            2. Metoda connect, która przyjmuje nazwę bazy do której ma się połączyć
-    public static Connection connect(String DbName) throws SQLException {
-        return DriverManager.getConnection(DB_URL_NO_DB.replace("%%%", DbName), DB_USER, DB_PASS);
-        // można tez sprobowac z replace np
-    }
+
 
 //    //            3. Metoda countAll(String tableName) - która zwraca ilość wierszy w bazie,
 //    public static int countAll(String tableName) {
@@ -250,42 +244,6 @@ public class DbUtil {
         return new String[0][0];
 
     }
-
-
-//          7. metoda Cinema getCinemaById(int id) - jeżeli potrzeba doadć conn jako dodatkowy parametr.
-//          Zwraca obiekt typu Cinema wypełniony danymi z bazy danych.
-//          8. metoda Cinama[] getAllCinemas() - jeżeli potrzeba doadć conn jako dodatkowy parametr.
-//          Zwraca tablice obiektow typu Cinema wypełniony danymi z bazy danych.
-//           Utworzyć klasę Cinema\
-
-
-////          7. metoda Cinema getCinemaById(int id) - jeżeli potrzeba doadć conn jako dodatkowy parametr.
-////          Zwraca obiekt typu Cinema wypełniony danymi z bazy danych.
-//    public static Cinema getCinemaById(int id) {
-//        String sqlQuery = "SELECT * FROM cinemas WHERE id = ?;";
-//        sqlQuery = sqlQuery.replace("?", Integer.toString(id));
-//        String[][] temp = DbUtil.getData(sqlQuery);
-//
-//        return new Cinema(Integer.parseInt(temp[0][0]), temp[0][1], temp[0][2]);
-//    }
-
-
-////          8. metoda Cinama[] getAllCinemas() - jeżeli potrzeba doadć conn jako dodatkowy parametr.
-////          Zwraca tablice obiektow typu Cinema wypełniony danymi z bazy danych.
-//    public static Cinema[] getAllCinemas() {
-//        String sqlQuery = "SELECT * FROM cinemas;";
-//        String[][] temp = DbUtil.getData(sqlQuery);
-//
-//        Cinema[] allCinemas = new Cinema[temp.length];
-//
-//        for (int i = 0; i < temp.length; i++) {
-//            allCinemas[i] = new Cinema(Integer.parseInt(temp[i][0]), temp[i][1], temp[i][2]);
-//        }
-//
-//        return allCinemas;
-//    }
-
-
 }
 
 
