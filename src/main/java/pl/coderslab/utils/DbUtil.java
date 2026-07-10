@@ -1,15 +1,19 @@
 package pl.coderslab.utils;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import pl.coderslab.entity.User;
 
 import java.sql.*;
 
 public class DbUtil {
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/workshop2?useSSL=false&characterEncoding=utf8";
-    private static final String DB_USER = "root";
-    private static final String DB_PASS = "NoweHaslo123!";
 
-    private static final String DB_URL_NO_DB = "jdbc:mysql://localhost:3306/%%%?useSSL=false&characterEncoding=utf8&serverTimezone=UTC";
+    private static final Dotenv dotenv = Dotenv.load();
+
+    private static final String DB_URL = dotenv.get("DB_URL");
+    private static final String DB_USER = dotenv.get("DB_USER");
+    private static final String DB_PASS = dotenv.get("DB_PASS");
+
+    private static final String DB_URL_NO_DBNAME = dotenv.get("DB_URL_NO_DBNAME");
 
 
     public static Connection connect() throws SQLException {
@@ -18,7 +22,7 @@ public class DbUtil {
 
     //            2. Metoda connect, która przyjmuje nazwę bazy do której ma się połączyć
     public static Connection connect(String DbName) throws SQLException {
-        return DriverManager.getConnection(DB_URL_NO_DB.replace("%%%", DbName), DB_USER, DB_PASS);
+        return DriverManager.getConnection(DB_URL_NO_DBNAME.replace("%%%", DbName), DB_USER, DB_PASS);
     }
 
     public static int insert(Connection conn, String query, String... params) {

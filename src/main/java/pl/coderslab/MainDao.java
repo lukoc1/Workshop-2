@@ -1,5 +1,6 @@
 package pl.coderslab;
 
+import pl.coderslab.entity.User;
 import pl.coderslab.entity.UserDao;
 
 public class MainDao {
@@ -9,11 +10,12 @@ public class MainDao {
         UserDao userDao = new UserDao();
 
 ////      CREATE USER
-//        User user = new User();
-//        user.setUserName("tomek").setEmail("tomek@gmail.com").setPassword("dobreHaslopl123");
-//        userDao.create(user);
+        User user = new User();
+        user.setUserName("tobiasz").setEmail("tobiasz@wp.pl").setPassword("dobre hasloo");
+        userDao.create(user);
 
 ////      READ + UPDATE USER
+
 ////            problem gdyby ktos zrobil - bo bedziemy robic hash hasła które jest już hashowane
 ////        User userToUpdate = userDao.read(7);
 ////        userDao.update(userToUpdate);
