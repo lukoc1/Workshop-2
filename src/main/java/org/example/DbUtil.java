@@ -1,5 +1,7 @@
 package org.example;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import javax.swing.plaf.nimbus.State;
 import java.sql.*;
 
@@ -126,25 +128,25 @@ public class DbUtil {
 //    }
 
 //    //            4. Metoda count(String sqlQuery) - która zwraca ilość wierszy dla zadanego zapytania
-//    public static int count(String sqlQuery) {
-//        try (Connection conn = DbUtil.connect();
-//             PreparedStatement statement = conn.prepareStatement(sqlQuery);
-//             ResultSet resultSet = statement.executeQuery()) {
-//
-//            int count = 0;
-//
-//            while (resultSet.next()) {
-//                count++;
-//            }
-//
-//            return count;
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return 0;
-//    }
+    public static int count(String sqlQuery) {
+        try (Connection conn = DbUtil.connect();
+             PreparedStatement statement = conn.prepareStatement(sqlQuery);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            int count = 0;
+
+            while (resultSet.next()) {
+                count++;
+            }
+
+            return count;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
 
 //    //  5. Metoda zwracająca czy wiersz o zadanym id istnieje w tabeli:
 //    //      public static boolean exists(Connection conn, String tableName, int id)
@@ -166,34 +168,65 @@ public class DbUtil {
 //    }
 
 //    //            6. Metoda getData - która zwróci tablicę tablic w wynikami dla zadanego zapytania
-//    public static String[][] getData(String sqlQuery) {
-//        try (Connection conn = DbUtil.connect();
-//             PreparedStatement statement = conn.prepareStatement(sqlQuery);
-//             ResultSet resultSet = statement.executeQuery()){
-//
-//            ResultSetMetaData rsmd = resultSet.getMetaData();
-//
-//            int columnsNumber = rsmd.getColumnCount();
-//            int rowsNumber = count(sqlQuery);
-//
-//            String[][] data = new String[rowsNumber][columnsNumber];
-//
-//            int row = 0;
-//
-//            while (resultSet.next()) {
-//                for (int col = 0; col < columnsNumber; col++) {
-//                    data[row][col] = resultSet.getString(col + 1);
-//                }
-//                row++;
-//            }
-//            return data;
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return new String[0][0];
-//
-//    }
+    public static String[][] getData(String sqlQuery) {
+        try (Connection conn = DbUtil.connect();
+             PreparedStatement statement = conn.prepareStatement(sqlQuery)){
+
+            ResultSet resultSet = statement.executeQuery();
+            ResultSetMetaData rsmd = resultSet.getMetaData();
+
+            int columnsNumber = rsmd.getColumnCount();
+            int rowsNumber = count(sqlQuery);
+
+            String[][] data = new String[rowsNumber][columnsNumber];
+
+            int row = 0;
+
+            while (resultSet.next()) {
+                for (int col = 0; col < columnsNumber; col++) {
+                    data[row][col] = resultSet.getString(col + 1);
+                }
+                row++;
+            }
+            return data;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return new String[0][0];
+
+    }
+
+
+    //    //            6. Metoda getData - która zwróci tablicę tablic w wynikami dla zadanego zapytania
+    public static String[][] getData(String sqlQuery, int id) {
+        try (Connection conn = DbUtil.connect();
+             PreparedStatement statement = conn.prepareStatement(sqlQuery)){
+
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            ResultSetMetaData rsmd = resultSet.getMetaData();
+
+            int columnsNumber = rsmd.getColumnCount();
+
+            if (!resultSet.next()) {
+                return new String[0][0];
+            }
+
+            String[][] data = new String[1][columnsNumber];
+
+            for (int col = 0; col < columnsNumber; col++) {
+                data[0][col] = resultSet.getString(col + 1);
+            }
+
+            return data;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return new String[0][0];
+
+    }
 
 
 //          7. metoda Cinema getCinemaById(int id) - jeżeli potrzeba doadć conn jako dodatkowy parametr.
@@ -228,7 +261,6 @@ public class DbUtil {
 //
 //        return allCinemas;
 //    }
-
 
 
 }
