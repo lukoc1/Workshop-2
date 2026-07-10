@@ -1,0 +1,1 @@
+Trzeba przenieść rzeczy związane z CRUD oraz różnymi Query do UserDao, DbUtil pozostawic z connection i

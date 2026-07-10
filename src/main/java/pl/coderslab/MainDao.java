@@ -20,7 +20,7 @@ public class MainDao {
 ////            problem gdyby ktos zrobil - bo bedziemy robic hash hasła które jest już hashowane
         User userToUpdate = userDao.read(7);
         PasswordUtil.checkPassword("jakies haslo", userToUpdate);
-        userDao.changePassword(7, "haslo");
+        userDao.updatePassword(7, "haslo");
         userToUpdate = userDao.read(7);
         PasswordUtil.checkPassword("haslo", userToUpdate);
 

@@ -28,13 +28,10 @@ public class UserDao {
     public User create(User user) {
 
         try (Connection conn = DbUtil.connect()) {
-            //            zapisać do bazy danych informacje z obiektu
-            //              pobrać id nowo zapisanego użytkownika
+
             int id = DbUtil.insert(conn, CREATE_USER_QUERY, user.getUserName(),
                         user.getEmail(), PasswordUtil.hashPassword(user.getPassword()));
-            //            uzupełnić id w obiekcie
             user.setId(id);
-            //            zwrócić uzupełniony obiekt
             return user;
 
             } catch (SQLException e) {
@@ -49,7 +46,6 @@ public class UserDao {
 
         try (Connection conn = DbUtil.connect()) {
 
-            //        pobrać z bazy danych wiersz dla zadanego identyfikatora
             String[][] temp = DbUtil.getData(READ_USER_QUERY, userId);
 
             if (temp.length == 0) {
@@ -57,15 +53,12 @@ public class UserDao {
                 return null;
             }
 
-            //        utworzyć nowy obiekt klasy User
             User user = new User();
-            //        uzupełnić obiekt danymi z bazy
             user.setId(Integer.parseInt(temp[0][0]));
             user.setEmail(temp[0][1]);
             user.setUserName(temp[0][2]);
             user.setPassword(temp[0][3]);
 
-            //        zwrócić uzupełniony obiekt
             return user;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -77,7 +70,6 @@ public class UserDao {
     public void update(User user) {
 
         try (Connection conn = DbUtil.connect()) {
-            //        W ramach metody należy zmienić dane w bazie na podstawie danych z obiektu.
             DbUtil.update(conn, UPDATE_USER_QUERY, user);
 
         } catch (SQLException e) {
@@ -90,7 +82,6 @@ public class UserDao {
     public void delete(int userId) {
 
         try (Connection conn = DbUtil.connect()) {
-//        W ramach metody należy usunąć wiersz z bazy danych na podstawie przekazanego identyfikatora.
             DbUtil.remove(conn, DELETE_USER_QUERY, userId);
 
         } catch (SQLException e) {
@@ -104,12 +95,10 @@ public class UserDao {
           try (Connection conn = DbUtil.connect();
                PreparedStatement statement = conn.prepareStatement(FIND_ALL_USER_QUERY)){
 
-              //          pobrać z bazy danych wszystkie wiersze z tabeli users
               ResultSet resultSet = statement.executeQuery();
 
               User[] users = new User[0];
 
-              //          na podstawie każdego wiersza utworzyć obiekt klasy User
               while (resultSet.next()) {
 
                   User user = new User();
@@ -118,10 +107,8 @@ public class UserDao {
                   user.setEmail(resultSet.getString("email"));
                   user.setPassword(resultSet.getString("password"));
 
-              //          obiekty umieścić w tablicy
                   users = addToArray(user, users);
               }
-             //          zwrócić tablicę obiektów
               return users;
           } catch (SQLException e) {
               e.printStackTrace();
@@ -138,7 +125,7 @@ public class UserDao {
     }
 
 
-    public void changePassword(int userId, String newPassword) {
+    public void updatePassword(int userId, String newPassword) {
 
         try (Connection conn = DbUtil.connect();
              PreparedStatement statement =
