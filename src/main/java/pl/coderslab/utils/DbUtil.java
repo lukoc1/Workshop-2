@@ -88,8 +88,8 @@ public class DbUtil {
 
             statement.setString(1, user.getUserName());
             statement.setString(2, user.getEmail());
-            statement.setString(3, PasswordUtil.hashPassword(user.getPassword()));
-            statement.setInt(4, user.getId());
+//            statement.setString(3, PasswordUtil.hashPassword(user.getPassword()));
+            statement.setInt(3, user.getId());
 
             int rowsUpdated = statement.executeUpdate();
 

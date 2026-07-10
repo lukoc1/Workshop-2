@@ -14,14 +14,17 @@ public class UserDao {
     private static final String READ_USER_QUERY =
             "SELECT * FROM users WHERE id = ?;";
     private static final String UPDATE_USER_QUERY =
-            "UPDATE users set userName = ?, email = ?, password = ? WHERE id = ?;";
+            "UPDATE users set userName = ?, email = ? WHERE id = ?;";
     private static final String DELETE_USER_QUERY =
             "DELETE FROM users where id = ?;";
     private static final String FIND_ALL_USER_QUERY =
             "SELECT * FROM users;";
+    private static final String CHANGE_PASSWORD_QUERY =
+            "UPDATE users SET password = ? WHERE id = ?";
 
 
-//    create - zapisuje obiekt do tabeli jako nowy wiersz
+
+    //    create - zapisuje obiekt do tabeli jako nowy wiersz
     public User create(User user) {
 
         try (Connection conn = DbUtil.connect()) {
@@ -133,5 +136,27 @@ public class UserDao {
         tmpUsers[users.length] = u; // Dodajemy obiekt na ostatniej pozycji.
         return tmpUsers; // Zwracamy nową tablicę.
     }
+
+
+    public void changePassword(int userId, String newPassword) {
+
+        try (Connection conn = DbUtil.connect();
+             PreparedStatement statement =
+                     conn.prepareStatement(CHANGE_PASSWORD_QUERY)) {
+
+            statement.setString(1, PasswordUtil.hashPassword(newPassword));
+            statement.setInt(2, userId);
+
+            int rowsUpdated = statement.executeUpdate();
+
+            if (rowsUpdated == 0) {
+                System.out.println("User with id " + userId + " not found.");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
 
