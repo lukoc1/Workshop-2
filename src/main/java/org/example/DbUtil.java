@@ -39,35 +39,6 @@ public class DbUtil {
         return 0;
     }
 
-//    public static void printData(Connection conn, String query, String... columnNames) throws SQLException {
-//
-//        try (PreparedStatement statement = conn.prepareStatement(query);
-//             ResultSet resultSet = statement.executeQuery();) {
-//            while (resultSet.next()) {
-//                for (String columnName : columnNames) {
-//                    System.out.println(resultSet.getString(columnName));
-//                }
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-
-//    public static void printDataOneline(Connection conn, String query, String... columnNames) throws SQLException {
-//
-//        try (PreparedStatement statement = conn.prepareStatement(query);
-//             ResultSet resultSet = statement.executeQuery();) {
-//            while (resultSet.next()) {
-//                for (String columnName : columnNames) {
-//                    System.out.print(" " + resultSet.getString(columnName));
-//                }
-//                System.out.println();
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-
     public static void remove(Connection conn, String query, int id) {
         try (PreparedStatement statement =
                      conn.prepareStatement(query);) {
@@ -94,7 +65,7 @@ public class DbUtil {
             int rowsUpdated = statement.executeUpdate();
 
             if (rowsUpdated == 0) {
-                System.out.println("Nie znaleziono rekordu o podanym id.");
+                System.out.println("Could not find user to update with this query: " + query);
             }
 
         } catch (SQLException e) {
@@ -104,7 +75,12 @@ public class DbUtil {
 
 //    UPDATE - but takes user as parameter
     public static void update(Connection conn, String query, User user) {
-        try ( PreparedStatement statement = conn.prepareStatement(query)) {
+
+        if (user == null) {
+            return;
+        }
+
+        try (PreparedStatement statement = conn.prepareStatement(query)) {
 
             statement.setString(1, user.getUserName());
             statement.setString(2, user.getEmail());
@@ -114,7 +90,7 @@ public class DbUtil {
             int rowsUpdated = statement.executeUpdate();
 
             if (rowsUpdated == 0) {
-                System.out.println("Nie znaleziono rekordu o podanym id.");
+                System.out.println("Could not find user with id: " + user.getId());
             }
 
         } catch (SQLException e) {
@@ -122,27 +98,6 @@ public class DbUtil {
         }
     }
 
-
-
-
-
-//    //            3. Metoda countAll(String tableName) - która zwraca ilość wierszy w bazie,
-//    public static int countAll(String tableName) {
-//        String query = "SELECT count(*) as count FROM " + tableName;
-//
-//        try (Connection conn = DbUtil.connect();
-//             PreparedStatement statement = conn.prepareStatement(query);
-//             ResultSet resultSet = statement.executeQuery()) {
-//
-//            resultSet.next();
-//            return resultSet.getInt("count");
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return 0;
-//
-//    }
 
 //    //            4. Metoda count(String sqlQuery) - która zwraca ilość wierszy dla zadanego zapytania
     public static int count(String sqlQuery) {
@@ -165,24 +120,24 @@ public class DbUtil {
         return 0;
     }
 
-//    //  5. Metoda zwracająca czy wiersz o zadanym id istnieje w tabeli:
-//    //      public static boolean exists(Connection conn, String tableName, int id)
-//    public static boolean exists(Connection conn, String tableName, int id) {
-//
-//        String sqlQuery = "SELECT * FROM " + tableName + " WHERE id = ?;";
-//        try (PreparedStatement statement = conn.prepareStatement(sqlQuery)) {
-//
-//            statement.setInt(1, id);
-//
-//            try (ResultSet resultSet = statement.executeQuery()) {
-//                return resultSet.next();
-//            }
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return false;
-//    }
+    //  5. Metoda zwracająca czy wiersz o zadanym id istnieje w tabeli:
+    //      public static boolean exists(Connection conn, String tableName, int id)
+    public static boolean exists(Connection conn, int id) {
+
+        String sqlQuery = "SELECT * FROM users WHERE id = ?;";
+        try (PreparedStatement statement = conn.prepareStatement(sqlQuery)) {
+
+            statement.setInt(1, id);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                return resultSet.next();
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
 //    //            6. Metoda getData - która zwróci tablicę tablic w wynikami dla zadanego zapytania
     public static String[][] getData(String sqlQuery) {

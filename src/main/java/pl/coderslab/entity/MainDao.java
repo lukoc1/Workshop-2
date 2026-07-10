@@ -5,26 +5,27 @@ public class MainDao {
     public static void main(String[] args) {
 
         UserDao userDao = new UserDao();
-        User user = new User();
-        user.setUserName("lukasz").setEmail("lukasz@onet.com").setPassword("pass");
 
+////      CREATE USER
+//        User user = new User();
+//        user.setUserName("tomek").setEmail("tomek@gmail.com").setPassword("dobreHaslopl123");
 //        userDao.create(user);
 
-
-        // problem gdyby ktos zrobil - bo bedziemy robic hash hasła które jest już hashowane
+////      READ + UPDATE USER
+////            problem gdyby ktos zrobil - bo bedziemy robic hash hasła które jest już hashowane
 //        User userToUpdate = userDao.read(1);
 //        userDao.update(userToUpdate);
 
-        User userToUpdate = userDao.read(1);
-        System.out.println(userToUpdate);
-        userToUpdate.setUserName("Arkadiusz");
-        userToUpdate.setEmail("arek@coderslab.pl");
-        userToUpdate.setPassword("superPassword");
-        System.out.println(userToUpdate);
-        userDao.update(userToUpdate);
+//        User userToUpdate = userDao.read(4);
+//        System.out.println(userToUpdate);
+//        userToUpdate.setUserName("Arkadiusz");
+//        userToUpdate.setEmail("arek@coderslab.pl");
+//        userToUpdate.setPassword("superPassword");
+//        System.out.println(userToUpdate);
+//        userDao.update(userToUpdate);
 
-
-//        userDao.delete(1);
+////      DELETE USER + FIND_ALL USERS
+//        userDao.delete(5);
 //        User[] all = userDao.findAll();
 //        for (User u : all) {
 //            System.out.println(u);
