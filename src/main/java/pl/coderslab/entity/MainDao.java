@@ -11,13 +11,17 @@ public class MainDao {
 //        userDao.create(user);
 
 
+        // problem gdyby ktos zrobil - bo bedziemy robic hash hasła które jest już hashowane
+//        User userToUpdate = userDao.read(1);
+//        userDao.update(userToUpdate);
+
         User userToUpdate = userDao.read(1);
         System.out.println(userToUpdate);
         userToUpdate.setUserName("Arkadiusz");
         userToUpdate.setEmail("arek@coderslab.pl");
         userToUpdate.setPassword("superPassword");
         System.out.println(userToUpdate);
-//        userDao.update(userToUpdate);
+        userDao.update(userToUpdate);
 
 
 //        userDao.delete(1);

@@ -13,7 +13,7 @@ public class UserDao {
     private static final String READ_USER_QUERY =
             "SELECT * FROM users WHERE id = ?;";
     private static final String UPDATE_USER_QUERY =
-            "";
+            "UPDATE users set userName = ?, email = ?, password = ? WHERE id = ?;";
     private static final String DELETE_USER_QUERY =
             "DELETE FROM tableName where id = ?";
 
@@ -66,15 +66,24 @@ public class UserDao {
         }
     }
 
-////    update - zapisuje obiekt do tabeli dokonujac modyfikacji istniejacego wczesniej wiersza tabeli
-//    public void update(User user) {
-////        W ramach metody należy zmienić dane w bazie na podstawie danych z obiektu.
-//    }
+//    update - zapisuje obiekt do tabeli dokonujac modyfikacji istniejacego wczesniej wiersza tabeli
+    public void update(User user) {
 
-////    delete - usuwa obiekt z tabeli czyli usuwa wiersz o id takim samym jak zapisany w obiekcie
-//    public void delete(int userId) {
-////        W ramach metody należy usunąć wiersz z bazy danych na podstawie przekazanego identyfikatora.
-//    }
+        try (Connection conn = DbUtil.connect()) {
+            //        W ramach metody należy zmienić dane w bazie na podstawie danych z obiektu.
+            DbUtil.update(conn, UPDATE_USER_QUERY, user);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+//    delete - usuwa obiekt z tabeli czyli usuwa wiersz o id takim samym jak zapisany w obiekcie
+    public void delete(int userId) {
+
+//        W ramach metody należy usunąć wiersz z bazy danych na podstawie przekazanego identyfikatora.
+    }
 
 ////    findAll - lista obiektow stworzonych z tabeli (wszystkich)
 //      public User[] findAll() {

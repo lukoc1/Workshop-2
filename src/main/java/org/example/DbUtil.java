@@ -1,6 +1,7 @@
 package org.example;
 
 import org.mindrot.jbcrypt.BCrypt;
+import pl.coderslab.entity.User;
 
 import javax.swing.plaf.nimbus.State;
 import java.sql.*;
@@ -102,6 +103,28 @@ public class DbUtil {
             e.printStackTrace();
         }
     }
+
+    //            1. Metoda update() - Analogicznie do insert()
+    public static void update(Connection conn, String query, User user) {
+        try ( PreparedStatement statement = conn.prepareStatement(query)) {
+
+            statement.setString(1, user.getUserName());
+            statement.setString(2, user.getEmail());
+            statement.setString(3, PasswordUtil.hashPassword(user.getPassword()));
+            statement.setInt(4, user.getId());
+
+            int rowsUpdated = statement.executeUpdate();
+
+            if (rowsUpdated == 0) {
+                System.out.println("Nie znaleziono rekordu o podanym id.");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
     //            2. Metoda connect, która przyjmuje nazwę bazy do której ma się połączyć
     public static Connection connect(String DbName) throws SQLException {
